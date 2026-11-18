@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<Wix xmlns="http://schemas.microsoft.com/wix/2006/wi">
+  <Product Name="WaveLite" Id="*" UpgradeCode="3b7a8654-8c2e-4c26-98f4-6c0f87a4d4a1" Language="1033" Codepage="1252" Version="0.1.0" Manufacturer="WaveLite">
+    <Package Id="*" Keywords="Installer" Description="WaveLite Windows hardware controls" Comments="WaveLite native Windows GUI" Manufacturer="WaveLite" InstallerVersion="200" Languages="1033" Compressed="yes" SummaryCodepage="1252" InstallScope="perUser" />
+    <Property Id="MSIDEPLOYMENTCOMPLIANT" Value="1" />
+    <Media Id="1" Cabinet="wavelite.cab" EmbedCab="yes" />
+
+    <Directory Id="TARGETDIR" Name="SourceDir">
+      <Directory Id="LocalAppDataFolder" Name="LocalAppData">
+        <Directory Id="INSTALLDIR" Name="WaveLite" />
+      </Directory>
+    </Directory>
+
+    <DirectoryRef Id="INSTALLDIR">
+      <Component Id="WaveLiteNativeGui" Guid="*">
+        <File Id="WaveLiteNativeGuiExe" Name="wavelite-gui.exe" Source="$(var.ReleaseDir)/wavelite-gui.exe" KeyPath="yes" />
+        <Shortcut Id="WaveLiteNativeShortcut" Name="WaveLite (Native)" Directory="ProgramMenuFolder" Target="[INSTALLDIR]wavelite-gui.exe" WorkingDirectory="INSTALLDIR" />
+      </Component>
+    </DirectoryRef>
+
+    <Feature Id="Complete" Level="1">
+      <ComponentRef Id="WaveLiteNativeGui" />
+    </Feature>
+  </Product>
+</Wix>

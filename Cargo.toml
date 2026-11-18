@@ -1,0 +1,58 @@
+[package]
+name = "wavelite"
+version = "0.1.0"
+edition = "2024"
+rust-version = "1.85"
+description = "Standalone Elgato Wave hardware control"
+
+[lib]
+crate-type = ["rlib", "staticlib"]
+
+[dependencies]
+clap = { version = "4.6.6", features = ["derive"] }
+rusb = "0.9.4"
+serde = { version = "1.0.229", features = ["derive"] }
+serde_json = "1.0.151"
+thiserror = "2.0.20"
+gtk = { package = "gtk4", version = "0.11.4", optional = true, features = ["v4_10"] }
+async-channel = { version = "2.5.0", optional = true }
+futures-util = { version = "0.3.34", optional = true, default-features = false, features = ["std"] }
+
+[target.'cfg(target_os = "macos")'.dependencies]
+rusb = { version = "0.9.4", features = ["vendored"] }
+uniffi = { version = "0.32.2", default-features = false }
+
+[dev-dependencies]
+uniffi = { version = "0.32.2", default-features = false }
+
+[target.'cfg(target_os = "windows")'.dependencies]
+native-windows-gui = { version = "1.0.13", optional = true, default-features = false, features = ["animation-timer", "combobox", "embed-resource", "flexbox", "frame", "high-dpi", "no-styling", "tabs", "trackbar"] }
+png = { version = "0.18", optional = true }
+windows = { version = "0.62.2", optional = true, features = ["Win32_Foundation", "Win32_Graphics_Gdi", "Win32_Security", "Win32_Storage_Xps", "Win32_UI_Controls", "Win32_UI_HiDpi", "Win32_UI_WindowsAndMessaging"] }
+windows-future = { version = "0.100", optional = true }
+windows-threading = { version = "0.100", optional = true }
+
+[features]
+default = ["gui"]
+gui = ["dep:gtk", "dep:async-channel", "dep:futures-util"]
+demo = []
+windows-gui = ["dep:native-windows-gui", "dep:png", "dep:windows", "dep:windows-future", "dep:windows-threading"]
+native-gui-demo = ["windows-gui", "demo"]
+
+[[bin]]
+name = "wavelite"
+path = "src/cli/main.rs"
+
+[[bin]]
+name = "wavelite-gui"
+path = "src/bin/wavelite-gui.rs"
+
+[[bin]]
+name = "wavelite-gui-demo"
+path = "src/gtk4/demo.rs"
+required-features = ["demo", "gui"]
+
+[[bin]]
+name = "wavelite-native-gui-demo"
+path = "src/win/demo.rs"
+required-features = ["native-gui-demo"]

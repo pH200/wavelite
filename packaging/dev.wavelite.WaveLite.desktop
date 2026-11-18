@@ -1,0 +1,10 @@
+[Desktop Entry]
+Type=Application
+Name=WaveLite
+Comment=Control Elgato Wave microphones
+Exec=wavelite-gui
+Icon=dev.wavelite.WaveLite
+Terminal=false
+Categories=AudioVideo;Audio;
+Keywords=Elgato;Wave;microphone;mixer;
+StartupNotify=true
